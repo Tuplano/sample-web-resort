@@ -4,12 +4,12 @@ import type { Accommodation } from '@/types/home'
 import { AccommodationCard } from '@/features/home/components/AccommodationCard'
 
 const navigationItems = [
-  'Home',
-  'Accommodations',
-  'Amenities',
-  'Activities',
-  'Gallery',
-  'Dining',
+  { label: 'Home', href: '#top' },
+  { label: 'Accommodations', href: '/accommodations' },
+  { label: 'Amenities', href: '#amenities' },
+  { label: 'Activities', href: '#activities' },
+  { label: 'Gallery', href: '#gallery' },
+  { label: 'Dining', href: '#dining' },
 ]
 
 const footerLinks = ['About', 'Contact', 'Privacy Policy', 'Sustainability', 'Careers']
@@ -47,10 +47,10 @@ export function HomePage() {
           {navigationItems.map((item) => (
             <a
               className="border-b border-transparent py-1 transition-colors hover:border-[#1b211d] hover:text-[#1b211d]"
-              href={`#${item.toLowerCase().replaceAll(' ', '-')}`}
-              key={item}
+              href={item.href}
+              key={item.label}
             >
-              {item}
+              {item.label}
             </a>
           ))}
         </nav>
