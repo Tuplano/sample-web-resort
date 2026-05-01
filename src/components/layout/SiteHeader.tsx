@@ -3,7 +3,7 @@ import {
   siteNavigationItems,
 } from '@/components/layout/site-navigation'
 
-export function SiteHeader({ active }: { active: SiteNavKey }) {
+export function SiteHeader({ active }: { active?: SiteNavKey }) {
   return (
     <header className="flex h-[72px] items-center border-b border-[#e5e2da] bg-[#fbfaf6] px-6 md:px-10">
       <a

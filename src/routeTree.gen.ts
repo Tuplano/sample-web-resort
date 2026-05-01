@@ -9,11 +9,23 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as GalleryRouteImport } from './routes/gallery'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AmenitiesRouteImport } from './routes/amenities'
 import { Route as ActivitiesRouteImport } from './routes/activities'
 import { Route as AccommodationsRouteImport } from './routes/accommodations'
 import { Route as IndexRouteImport } from './routes/index'
 
+const GalleryRoute = GalleryRouteImport.update({
+  id: '/gallery',
+  path: '/gallery',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AmenitiesRoute = AmenitiesRouteImport.update({
   id: '/amenities',
   path: '/amenities',
@@ -40,12 +52,16 @@ export interface FileRoutesByFullPath {
   '/accommodations': typeof AccommodationsRoute
   '/activities': typeof ActivitiesRoute
   '/amenities': typeof AmenitiesRoute
+  '/contact': typeof ContactRoute
+  '/gallery': typeof GalleryRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/accommodations': typeof AccommodationsRoute
   '/activities': typeof ActivitiesRoute
   '/amenities': typeof AmenitiesRoute
+  '/contact': typeof ContactRoute
+  '/gallery': typeof GalleryRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -53,13 +69,34 @@ export interface FileRoutesById {
   '/accommodations': typeof AccommodationsRoute
   '/activities': typeof ActivitiesRoute
   '/amenities': typeof AmenitiesRoute
+  '/contact': typeof ContactRoute
+  '/gallery': typeof GalleryRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/accommodations' | '/activities' | '/amenities'
+  fullPaths:
+    | '/'
+    | '/accommodations'
+    | '/activities'
+    | '/amenities'
+    | '/contact'
+    | '/gallery'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/accommodations' | '/activities' | '/amenities'
-  id: '__root__' | '/' | '/accommodations' | '/activities' | '/amenities'
+  to:
+    | '/'
+    | '/accommodations'
+    | '/activities'
+    | '/amenities'
+    | '/contact'
+    | '/gallery'
+  id:
+    | '__root__'
+    | '/'
+    | '/accommodations'
+    | '/activities'
+    | '/amenities'
+    | '/contact'
+    | '/gallery'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -67,10 +104,26 @@ export interface RootRouteChildren {
   AccommodationsRoute: typeof AccommodationsRoute
   ActivitiesRoute: typeof ActivitiesRoute
   AmenitiesRoute: typeof AmenitiesRoute
+  ContactRoute: typeof ContactRoute
+  GalleryRoute: typeof GalleryRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/gallery': {
+      id: '/gallery'
+      path: '/gallery'
+      fullPath: '/gallery'
+      preLoaderRoute: typeof GalleryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/amenities': {
       id: '/amenities'
       path: '/amenities'
@@ -107,6 +160,8 @@ const rootRouteChildren: RootRouteChildren = {
   AccommodationsRoute: AccommodationsRoute,
   ActivitiesRoute: ActivitiesRoute,
   AmenitiesRoute: AmenitiesRoute,
+  ContactRoute: ContactRoute,
+  GalleryRoute: GalleryRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

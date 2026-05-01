@@ -1,9 +1,9 @@
 const footerLinks = [
-  'About',
-  'Contact',
-  'Privacy Policy',
-  'Sustainability',
-  'Careers',
+  { label: 'About', href: '/' },
+  { label: 'Contact', href: '/contact' },
+  { label: 'Privacy Policy', href: '/' },
+  { label: 'Sustainability', href: '/' },
+  { label: 'Careers', href: '/' },
 ]
 
 export function SiteFooter() {
@@ -20,8 +20,8 @@ export function SiteFooter() {
         </div>
         <nav className="flex flex-wrap gap-x-9 gap-y-4 text-[13px] text-[#3f4741]">
           {footerLinks.map((link) => (
-            <a className="transition-colors hover:text-[#1b211d]" href="/" key={link}>
-              {link}
+            <a className="transition-colors hover:text-[#1b211d]" href={link.href} key={link.label}>
+              {link.label}
             </a>
           ))}
         </nav>
