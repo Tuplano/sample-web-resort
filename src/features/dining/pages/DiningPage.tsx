@@ -1,5 +1,3 @@
-import { SiteFooter } from '@/components/layout/SiteFooter'
-import { SiteHeader } from '@/components/layout/SiteHeader'
 import type { DiningHighlight } from '@/types/dining'
 import { DiningExperienceGrid } from '@/features/dining/components/DiningExperienceGrid'
 
@@ -20,9 +18,7 @@ const diningHighlights: DiningHighlight[] = [
 
 export function DiningPage() {
   return (
-    <main className="min-h-screen bg-[#f7f5ef] text-[#1b211d]">
-      <SiteHeader active="dining" />
-
+    <>
       <section
         className="relative flex min-h-[620px] items-center justify-center bg-cover bg-center px-6 text-center text-white"
         style={{
@@ -70,7 +66,7 @@ export function DiningPage() {
           </div>
           <a
             className="mt-10 inline-flex h-10 items-center justify-center border border-[#8f9891] px-8 text-[10px] font-semibold uppercase text-[#24302a] transition-colors hover:border-[#07342f] hover:bg-[#07342f] hover:text-white"
-            href="#menu"
+            href="/dining/menu"
           >
             View Menu
           </a>
@@ -98,8 +94,6 @@ export function DiningPage() {
         </div>
         <DiningExperienceGrid highlights={diningHighlights} />
       </section>
-
-      <SiteFooter />
-    </main>
+    </>
   )
 }

@@ -3,3 +3,9 @@ export interface DiningHighlight {
   description: string
   label: string
 }
+
+export interface MenuItem {
+  name: string
+  price: number
+  description: string
+}

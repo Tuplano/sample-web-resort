@@ -16,6 +16,8 @@ import { Route as AmenitiesRouteImport } from './routes/amenities'
 import { Route as ActivitiesRouteImport } from './routes/activities'
 import { Route as AccommodationsRouteImport } from './routes/accommodations'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DiningIndexRouteImport } from './routes/dining/index'
+import { Route as DiningMenuRouteImport } from './routes/dining/menu'
 
 const GalleryRoute = GalleryRouteImport.update({
   id: '/gallery',
@@ -52,6 +54,16 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DiningIndexRoute = DiningIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DiningRoute,
+} as any)
+const DiningMenuRoute = DiningMenuRouteImport.update({
+  id: '/menu',
+  path: '/menu',
+  getParentRoute: () => DiningRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -59,8 +71,10 @@ export interface FileRoutesByFullPath {
   '/activities': typeof ActivitiesRoute
   '/amenities': typeof AmenitiesRoute
   '/contact': typeof ContactRoute
-  '/dining': typeof DiningRoute
+  '/dining': typeof DiningRouteWithChildren
   '/gallery': typeof GalleryRoute
+  '/dining/menu': typeof DiningMenuRoute
+  '/dining/': typeof DiningIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -68,8 +82,9 @@ export interface FileRoutesByTo {
   '/activities': typeof ActivitiesRoute
   '/amenities': typeof AmenitiesRoute
   '/contact': typeof ContactRoute
-  '/dining': typeof DiningRoute
   '/gallery': typeof GalleryRoute
+  '/dining/menu': typeof DiningMenuRoute
+  '/dining': typeof DiningIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -78,8 +93,10 @@ export interface FileRoutesById {
   '/activities': typeof ActivitiesRoute
   '/amenities': typeof AmenitiesRoute
   '/contact': typeof ContactRoute
-  '/dining': typeof DiningRoute
+  '/dining': typeof DiningRouteWithChildren
   '/gallery': typeof GalleryRoute
+  '/dining/menu': typeof DiningMenuRoute
+  '/dining/': typeof DiningIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -91,6 +108,8 @@ export interface FileRouteTypes {
     | '/contact'
     | '/dining'
     | '/gallery'
+    | '/dining/menu'
+    | '/dining/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -98,8 +117,9 @@ export interface FileRouteTypes {
     | '/activities'
     | '/amenities'
     | '/contact'
-    | '/dining'
     | '/gallery'
+    | '/dining/menu'
+    | '/dining'
   id:
     | '__root__'
     | '/'
@@ -109,6 +129,8 @@ export interface FileRouteTypes {
     | '/contact'
     | '/dining'
     | '/gallery'
+    | '/dining/menu'
+    | '/dining/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -117,7 +139,7 @@ export interface RootRouteChildren {
   ActivitiesRoute: typeof ActivitiesRoute
   AmenitiesRoute: typeof AmenitiesRoute
   ContactRoute: typeof ContactRoute
-  DiningRoute: typeof DiningRoute
+  DiningRoute: typeof DiningRouteWithChildren
   GalleryRoute: typeof GalleryRoute
 }
 
@@ -172,8 +194,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dining/': {
+      id: '/dining/'
+      path: '/'
+      fullPath: '/dining/'
+      preLoaderRoute: typeof DiningIndexRouteImport
+      parentRoute: typeof DiningRoute
+    }
+    '/dining/menu': {
+      id: '/dining/menu'
+      path: '/menu'
+      fullPath: '/dining/menu'
+      preLoaderRoute: typeof DiningMenuRouteImport
+      parentRoute: typeof DiningRoute
+    }
   }
 }
+
+interface DiningRouteChildren {
+  DiningMenuRoute: typeof DiningMenuRoute
+  DiningIndexRoute: typeof DiningIndexRoute
+}
+
+const DiningRouteChildren: DiningRouteChildren = {
+  DiningMenuRoute: DiningMenuRoute,
+  DiningIndexRoute: DiningIndexRoute,
+}
+
+const DiningRouteWithChildren =
+  DiningRoute._addFileChildren(DiningRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -181,7 +230,7 @@ const rootRouteChildren: RootRouteChildren = {
   ActivitiesRoute: ActivitiesRoute,
   AmenitiesRoute: AmenitiesRoute,
   ContactRoute: ContactRoute,
-  DiningRoute: DiningRoute,
+  DiningRoute: DiningRouteWithChildren,
   GalleryRoute: GalleryRoute,
 }
 export const routeTree = rootRouteImport
