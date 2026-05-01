@@ -46,7 +46,7 @@ export function HomePage() {
           </p>
           <a
             className="mt-10 inline-flex h-10 items-center justify-center bg-[#07342f] px-7 text-[10px] font-semibold uppercase text-white transition-colors hover:bg-[#0e433c]"
-            href="#booking"
+            href="/reservation"
           >
             Book Your Stay
           </a>

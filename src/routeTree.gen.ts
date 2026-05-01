@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ReservationRouteImport } from './routes/reservation'
 import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as DiningRouteImport } from './routes/dining'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -19,6 +20,11 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as DiningIndexRouteImport } from './routes/dining/index'
 import { Route as DiningMenuRouteImport } from './routes/dining/menu'
 
+const ReservationRoute = ReservationRouteImport.update({
+  id: '/reservation',
+  path: '/reservation',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GalleryRoute = GalleryRouteImport.update({
   id: '/gallery',
   path: '/gallery',
@@ -73,6 +79,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/dining': typeof DiningRouteWithChildren
   '/gallery': typeof GalleryRoute
+  '/reservation': typeof ReservationRoute
   '/dining/menu': typeof DiningMenuRoute
   '/dining/': typeof DiningIndexRoute
 }
@@ -83,6 +90,7 @@ export interface FileRoutesByTo {
   '/amenities': typeof AmenitiesRoute
   '/contact': typeof ContactRoute
   '/gallery': typeof GalleryRoute
+  '/reservation': typeof ReservationRoute
   '/dining/menu': typeof DiningMenuRoute
   '/dining': typeof DiningIndexRoute
 }
@@ -95,6 +103,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/dining': typeof DiningRouteWithChildren
   '/gallery': typeof GalleryRoute
+  '/reservation': typeof ReservationRoute
   '/dining/menu': typeof DiningMenuRoute
   '/dining/': typeof DiningIndexRoute
 }
@@ -108,6 +117,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/dining'
     | '/gallery'
+    | '/reservation'
     | '/dining/menu'
     | '/dining/'
   fileRoutesByTo: FileRoutesByTo
@@ -118,6 +128,7 @@ export interface FileRouteTypes {
     | '/amenities'
     | '/contact'
     | '/gallery'
+    | '/reservation'
     | '/dining/menu'
     | '/dining'
   id:
@@ -129,6 +140,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/dining'
     | '/gallery'
+    | '/reservation'
     | '/dining/menu'
     | '/dining/'
   fileRoutesById: FileRoutesById
@@ -141,10 +153,18 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   DiningRoute: typeof DiningRouteWithChildren
   GalleryRoute: typeof GalleryRoute
+  ReservationRoute: typeof ReservationRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/reservation': {
+      id: '/reservation'
+      path: '/reservation'
+      fullPath: '/reservation'
+      preLoaderRoute: typeof ReservationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/gallery': {
       id: '/gallery'
       path: '/gallery'
@@ -232,6 +252,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   DiningRoute: DiningRouteWithChildren,
   GalleryRoute: GalleryRoute,
+  ReservationRoute: ReservationRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

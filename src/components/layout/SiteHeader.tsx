@@ -28,8 +28,8 @@ export function SiteHeader({ active }: { active?: SiteNavKey }) {
         ))}
       </nav>
       <a
-        className="ml-auto inline-flex h-8 items-center justify-center bg-[#07342f] px-5 text-[10px] font-semibold text-white transition-colors hover:bg-[#0e433c] md:ml-0"
-        href="#booking"
+        className="ml-auto inline-flex h-8 items-center justify-center rounded-full bg-[#07342f] px-5 text-[10px] font-semibold text-white transition-colors hover:bg-[#0e433c] md:ml-0"
+        href="/reservation"
       >
         Book Now
       </a>
