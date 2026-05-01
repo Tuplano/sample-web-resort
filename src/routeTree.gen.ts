@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ReservationRouteImport } from './routes/reservation'
 import { Route as GalleryRouteImport } from './routes/gallery'
+import { Route as FaqRouteImport } from './routes/faq'
 import { Route as DiningRouteImport } from './routes/dining'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AmenitiesRouteImport } from './routes/amenities'
@@ -28,6 +29,11 @@ const ReservationRoute = ReservationRouteImport.update({
 const GalleryRoute = GalleryRouteImport.update({
   id: '/gallery',
   path: '/gallery',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DiningRoute = DiningRouteImport.update({
@@ -78,6 +84,7 @@ export interface FileRoutesByFullPath {
   '/amenities': typeof AmenitiesRoute
   '/contact': typeof ContactRoute
   '/dining': typeof DiningRouteWithChildren
+  '/faq': typeof FaqRoute
   '/gallery': typeof GalleryRoute
   '/reservation': typeof ReservationRoute
   '/dining/menu': typeof DiningMenuRoute
@@ -89,6 +96,7 @@ export interface FileRoutesByTo {
   '/activities': typeof ActivitiesRoute
   '/amenities': typeof AmenitiesRoute
   '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
   '/gallery': typeof GalleryRoute
   '/reservation': typeof ReservationRoute
   '/dining/menu': typeof DiningMenuRoute
@@ -102,6 +110,7 @@ export interface FileRoutesById {
   '/amenities': typeof AmenitiesRoute
   '/contact': typeof ContactRoute
   '/dining': typeof DiningRouteWithChildren
+  '/faq': typeof FaqRoute
   '/gallery': typeof GalleryRoute
   '/reservation': typeof ReservationRoute
   '/dining/menu': typeof DiningMenuRoute
@@ -116,6 +125,7 @@ export interface FileRouteTypes {
     | '/amenities'
     | '/contact'
     | '/dining'
+    | '/faq'
     | '/gallery'
     | '/reservation'
     | '/dining/menu'
@@ -127,6 +137,7 @@ export interface FileRouteTypes {
     | '/activities'
     | '/amenities'
     | '/contact'
+    | '/faq'
     | '/gallery'
     | '/reservation'
     | '/dining/menu'
@@ -139,6 +150,7 @@ export interface FileRouteTypes {
     | '/amenities'
     | '/contact'
     | '/dining'
+    | '/faq'
     | '/gallery'
     | '/reservation'
     | '/dining/menu'
@@ -152,6 +164,7 @@ export interface RootRouteChildren {
   AmenitiesRoute: typeof AmenitiesRoute
   ContactRoute: typeof ContactRoute
   DiningRoute: typeof DiningRouteWithChildren
+  FaqRoute: typeof FaqRoute
   GalleryRoute: typeof GalleryRoute
   ReservationRoute: typeof ReservationRoute
 }
@@ -170,6 +183,13 @@ declare module '@tanstack/react-router' {
       path: '/gallery'
       fullPath: '/gallery'
       preLoaderRoute: typeof GalleryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dining': {
@@ -251,6 +271,7 @@ const rootRouteChildren: RootRouteChildren = {
   AmenitiesRoute: AmenitiesRoute,
   ContactRoute: ContactRoute,
   DiningRoute: DiningRouteWithChildren,
+  FaqRoute: FaqRoute,
   GalleryRoute: GalleryRoute,
   ReservationRoute: ReservationRoute,
 }
