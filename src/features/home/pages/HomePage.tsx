@@ -1,7 +1,5 @@
 import { ArrowUpRight } from 'lucide-react'
 
-import { SiteFooter } from '@/components/layout/SiteFooter'
-import { SiteHeader } from '@/components/layout/SiteHeader'
 import type { Accommodation } from '@/types/home'
 import { AccommodationCard } from '@/features/home/components/AccommodationCard'
 
@@ -29,9 +27,7 @@ const accommodations: [Accommodation, ...Accommodation[]] = [
 
 export function HomePage() {
   return (
-    <main className="min-h-screen bg-[#f7f5ef] text-[#1b211d]">
-      <SiteHeader active="home" />
-
+    <>
       <section
         className="relative flex min-h-[calc(100vh-72px)] items-center justify-center bg-cover bg-center px-6 text-center text-white"
         id="top"
@@ -109,7 +105,6 @@ export function HomePage() {
         </div>
       </section>
 
-      <SiteFooter />
-    </main>
+    </>
   )
 }

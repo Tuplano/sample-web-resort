@@ -1,5 +1,3 @@
-import { SiteFooter } from '@/components/layout/SiteFooter'
-import { SiteHeader } from '@/components/layout/SiteHeader'
 import type { Activity, WeeklyActivity } from '@/types/activities'
 import { ActivityCard } from '@/features/activities/components/ActivityCard'
 import { WeeklyRhythm } from '@/features/activities/components/WeeklyRhythm'
@@ -54,9 +52,7 @@ const weeklyActivities: WeeklyActivity[] = [
 
 export function ActivitiesPage() {
   return (
-    <main className="min-h-screen bg-[#f7f5ef] text-[#1b211d]">
-      <SiteHeader active="activities" />
-
+    <>
       <section
         className="relative flex min-h-[420px] items-center justify-center bg-cover bg-center px-6 text-center text-white lg:min-h-[460px]"
         style={{
@@ -199,7 +195,6 @@ export function ActivitiesPage() {
         </div>
       </section>
 
-      <SiteFooter />
-    </main>
+    </>
   )
 }

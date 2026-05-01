@@ -1,7 +1,5 @@
 import { ChevronDown } from 'lucide-react'
 
-import { SiteFooter } from '@/components/layout/SiteFooter'
-import { SiteHeader } from '@/components/layout/SiteHeader'
 import type { Accommodation } from '@/types/home'
 import {
   AccommodationListingCard,
@@ -83,9 +81,7 @@ export function AccommodationsPage() {
   const compactAccommodations = standardAccommodations.slice(2)
 
   return (
-    <main className="min-h-screen bg-[#f7f5ef] text-[#1b211d]">
-      <SiteHeader active="accommodations" />
-
+    <>
       <section className="px-6 pb-12 pt-20 text-center md:px-10 lg:pt-24">
         <h1 className="font-serif text-[46px] leading-none md:text-[62px]">
           Sanctuaries of Serenity
@@ -143,7 +139,6 @@ export function AccommodationsPage() {
         </div>
       </section>
 
-      <SiteFooter />
-    </main>
+    </>
   )
 }

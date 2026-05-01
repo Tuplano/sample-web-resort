@@ -1,5 +1,3 @@
-import { SiteFooter } from '@/components/layout/SiteFooter'
-import { SiteHeader } from '@/components/layout/SiteHeader'
 import type { Amenity } from '@/types/amenities'
 import { AmenityTile } from '@/features/amenities/components/AmenityTile'
 
@@ -44,9 +42,7 @@ const amenities: Amenity[] = [
 
 export function AmenitiesPage() {
   return (
-    <main className="min-h-screen bg-[#f7f5ef] text-[#1b211d]">
-      <SiteHeader active="amenities" />
-
+    <>
       <section
         className="relative flex min-h-[500px] items-center justify-center bg-cover bg-center px-6 text-center text-white lg:min-h-[540px]"
         style={{
@@ -84,7 +80,6 @@ export function AmenitiesPage() {
         </div>
       </section>
 
-      <SiteFooter />
-    </main>
+    </>
   )
 }

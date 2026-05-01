@@ -1,5 +1,3 @@
-import { SiteFooter } from '@/components/layout/SiteFooter'
-import { SiteHeader } from '@/components/layout/SiteHeader'
 import type { GalleryImage } from '@/types/gallery'
 import { GalleryExperience } from '@/features/gallery/components/GalleryExperience'
 
@@ -45,9 +43,7 @@ const galleryImages: {
 
 export function GalleryPage() {
   return (
-    <main className="min-h-screen bg-[#f7f5ef] text-[#1b211d]">
-      <SiteHeader active="gallery" />
-
+    <>
       <section className="px-6 pb-16 pt-16 text-center md:px-10 lg:px-20 lg:pt-20">
         <p className="mb-5 text-[10px] uppercase tracking-[0.24em] text-[#5f675f]">
           Visual Journey
@@ -62,7 +58,6 @@ export function GalleryPage() {
       </section>
 
       <GalleryExperience images={galleryImages} />
-      <SiteFooter />
-    </main>
+    </>
   )
 }
