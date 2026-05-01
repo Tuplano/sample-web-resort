@@ -58,7 +58,7 @@ export function ActivitiesPage() {
       <SiteHeader active="activities" />
 
       <section
-        className="relative flex min-h-[435px] items-center justify-center bg-cover bg-center px-6 text-center text-white"
+        className="relative flex min-h-[420px] items-center justify-center bg-cover bg-center px-6 text-center text-white lg:min-h-[460px]"
         style={{
           backgroundImage:
             "linear-gradient(rgba(10, 35, 31, 0.2), rgba(10, 35, 31, 0.64)), url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=2400&q=84')",
@@ -82,7 +82,7 @@ export function ActivitiesPage() {
       </section>
 
       <section className="border-b border-[#e4e1d8] bg-[#fbfaf7]" aria-label="Activity filters">
-        <div className="mx-auto flex max-w-[980px] justify-center gap-10 overflow-x-auto px-6 py-5 text-[10px] uppercase text-[#7a8079]">
+        <div className="flex justify-center gap-10 overflow-x-auto px-6 py-5 text-[10px] uppercase text-[#7a8079] md:px-10 lg:px-20">
           {categoryFilters.map((filter) => (
             <button
               className="shrink-0 border-b border-transparent pb-1 transition-colors hover:border-[#1b211d] hover:text-[#1b211d] first:border-[#1b211d] first:text-[#1b211d]"
@@ -95,7 +95,7 @@ export function ActivitiesPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-[1180px] px-6 py-24 md:px-10" id="activities">
+      <section className="px-6 py-20 md:px-10 lg:px-20 lg:py-24" id="activities">
         <div className="grid gap-8 lg:grid-cols-3">
           {activities.map((activity) => (
             <ActivityCard activity={activity} key={activity.name} />
@@ -103,8 +103,8 @@ export function ActivitiesPage() {
         </div>
       </section>
 
-      <section className="bg-[#efede7] px-6 py-24 md:px-10">
-        <div className="mx-auto grid max-w-[1180px] gap-16 md:grid-cols-[1.05fr_0.95fr] md:items-center">
+      <section className="bg-[#efede7] px-6 py-20 md:px-10 lg:py-24">
+        <div className="grid gap-16 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:px-10">
           <div className="relative max-w-[560px]">
             <img
               alt="Beach picnic setup beside turquoise water"
@@ -153,8 +153,8 @@ export function ActivitiesPage() {
         </div>
       </section>
 
-      <section className="px-6 py-24 md:px-10">
-        <div className="mx-auto max-w-[1180px]">
+      <section className="px-6 py-20 md:px-10 lg:px-20 lg:py-24">
+        <div>
           <div className="mb-12 text-center">
             <h2 className="font-serif text-[32px] leading-tight">
               The Weekly Rhythm
@@ -169,7 +169,7 @@ export function ActivitiesPage() {
         </div>
       </section>
 
-      <section className="bg-[#07342f] px-6 py-24 text-center text-white md:px-10">
+      <section className="bg-[#07342f] px-6 py-20 text-center text-white md:px-10 lg:py-24">
         <div className="mx-auto max-w-3xl">
           <h2 className="font-serif text-[42px] leading-none md:text-[50px]">
             Your Personal Adventure

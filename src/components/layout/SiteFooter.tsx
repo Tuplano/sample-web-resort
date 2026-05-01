@@ -9,7 +9,7 @@ const footerLinks = [
 export function SiteFooter() {
   return (
     <footer className="border-t border-[#e1dfd7] bg-[#fbfaf7]" id="booking">
-      <div className="grid gap-12 px-6 py-20 md:grid-cols-[1fr_1.2fr_0.8fr] md:items-start md:px-10 lg:px-20">
+      <div className="grid gap-10 px-6 py-16 md:grid-cols-[1fr_1.2fr_0.8fr] md:items-start md:px-10 lg:px-20">
         <div>
           <h2 className="font-serif text-[13px] tracking-[0.18em] text-[#1b211d]">
             LUMINA COAST

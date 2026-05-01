@@ -58,7 +58,7 @@ export function HomePage() {
       </section>
 
       <section
-        className="grid gap-12 px-6 py-20 md:grid-cols-[0.9fr_1fr] md:items-center md:px-10 lg:px-20 lg:py-28"
+        className="grid gap-12 px-6 py-20 md:grid-cols-[0.9fr_1fr] md:items-center md:px-10 lg:px-20 lg:py-24"
         id="amenities"
       >
         <div className="max-w-xl">
@@ -90,7 +90,7 @@ export function HomePage() {
       </section>
 
       <section
-        className="border-y border-[#e4e1d8] bg-[#fbfaf7] px-6 py-20 md:px-10 lg:px-20 lg:py-28"
+        className="border-y border-[#e4e1d8] bg-[#fbfaf7] px-6 py-20 md:px-10 lg:px-20 lg:py-24"
         id="accommodations"
       >
         <div className="mb-12 text-center">

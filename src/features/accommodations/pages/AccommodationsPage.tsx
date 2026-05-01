@@ -86,7 +86,7 @@ export function AccommodationsPage() {
     <main className="min-h-screen bg-[#f7f5ef] text-[#1b211d]">
       <SiteHeader active="accommodations" />
 
-      <section className="px-6 pb-14 pt-28 text-center md:px-10">
+      <section className="px-6 pb-12 pt-20 text-center md:px-10 lg:pt-24">
         <h1 className="font-serif text-[46px] leading-none md:text-[62px]">
           Sanctuaries of Serenity
         </h1>
@@ -98,7 +98,7 @@ export function AccommodationsPage() {
       </section>
 
       <section className="px-6 md:px-10" aria-label="Accommodation filters">
-        <div className="mx-auto flex max-w-[1280px] flex-col gap-5 border-b border-[#dfddd5] pb-9 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col gap-5 border-b border-[#dfddd5] pb-9 md:flex-row md:items-center md:justify-between lg:px-10">
           <div className="flex flex-wrap gap-3">
             {['All Accommodations', 'Ocean View', 'Garden View'].map((filter) => (
               <button
@@ -121,7 +121,7 @@ export function AccommodationsPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-[1280px] px-6 py-16 md:px-10">
+      <section className="px-6 py-16 md:px-10 lg:px-20 lg:py-20">
         {featuredAccommodation ? (
           <AccommodationListingCard accommodation={featuredAccommodation} />
         ) : null}
@@ -143,9 +143,7 @@ export function AccommodationsPage() {
         </div>
       </section>
 
-      <div className="mt-24">
-        <SiteFooter />
-      </div>
+      <SiteFooter />
     </main>
   )
 }

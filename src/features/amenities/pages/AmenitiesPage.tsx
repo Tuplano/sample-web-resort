@@ -48,7 +48,7 @@ export function AmenitiesPage() {
       <SiteHeader active="amenities" />
 
       <section
-        className="relative flex min-h-[610px] items-center justify-center bg-cover bg-center px-6 text-center text-white"
+        className="relative flex min-h-[500px] items-center justify-center bg-cover bg-center px-6 text-center text-white lg:min-h-[540px]"
         style={{
           backgroundImage:
             "linear-gradient(rgba(14, 31, 27, 0.34), rgba(14, 31, 27, 0.38)), url('https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=2400&q=84')",
@@ -65,8 +65,8 @@ export function AmenitiesPage() {
         </div>
       </section>
 
-      <section className="px-6 py-24 md:px-10 lg:px-8 lg:py-32">
-        <div className="mx-auto max-w-[1220px]">
+      <section className="px-6 py-20 md:px-10 lg:px-20 lg:py-24">
+        <div>
           <div className="mb-16 text-center">
             <h2 className="font-serif text-[42px] leading-tight md:text-[48px]">
               Signature Amenities
