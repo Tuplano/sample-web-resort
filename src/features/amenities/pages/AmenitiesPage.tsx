@@ -1,14 +1,7 @@
+import { SiteFooter } from '@/components/layout/SiteFooter'
+import { SiteHeader } from '@/components/layout/SiteHeader'
 import type { Amenity } from '@/types/amenities'
 import { AmenityTile } from '@/features/amenities/components/AmenityTile'
-
-const navigationItems = [
-  { label: 'Home', href: '/' },
-  { label: 'Accommodations', href: '/accommodations' },
-  { label: 'Amenities', href: '/amenities' },
-  { label: 'Activities', href: '/#activities' },
-  { label: 'Gallery', href: '/#gallery' },
-  { label: 'Dining', href: '/#dining' },
-]
 
 const amenities: Amenity[] = [
   {
@@ -52,32 +45,7 @@ const amenities: Amenity[] = [
 export function AmenitiesPage() {
   return (
     <main className="min-h-screen bg-[#f7f5ef] text-[#1b211d]">
-      <header className="flex h-[78px] items-center border-b border-[#e5e2da] bg-[#fbfaf6] px-6 md:px-10">
-        <a className="font-serif text-[18px] tracking-[0.24em] text-[#07342f]" href="/">
-          LUMINA COAST
-        </a>
-        <nav className="mx-auto hidden items-center gap-9 text-[12px] tracking-[0.08em] text-[#48514b] md:flex">
-          {navigationItems.map((item) => (
-            <a
-              className={`border-b py-1 transition-colors hover:border-[#1b211d] hover:text-[#1b211d] ${
-                item.label === 'Amenities'
-                  ? 'border-[#1b211d] text-[#1b211d]'
-                  : 'border-transparent'
-              }`}
-              href={item.href}
-              key={item.label}
-            >
-              {item.label}
-            </a>
-          ))}
-        </nav>
-        <a
-          className="ml-auto inline-flex h-9 items-center justify-center bg-[#07342f] px-7 text-[12px] font-semibold text-white transition-colors hover:bg-[#0e433c] md:ml-0"
-          href="#booking"
-        >
-          Book Now
-        </a>
-      </header>
+      <SiteHeader active="amenities" />
 
       <section
         className="relative flex min-h-[610px] items-center justify-center bg-cover bg-center px-6 text-center text-white"
@@ -116,30 +84,7 @@ export function AmenitiesPage() {
         </div>
       </section>
 
-      <footer className="border-t border-[#e1dfd7] bg-[#fbfaf7]" id="booking">
-        <div className="grid gap-12 px-6 py-20 md:grid-cols-[1fr_1.2fr_0.8fr] md:items-start md:px-10 lg:px-8">
-          <div>
-            <h2 className="font-serif text-[16px] tracking-[0.18em]">LUMINA COAST</h2>
-            <p className="mt-8 max-w-[260px] text-[14px] leading-7 text-[#697069]">
-              A sanctuary of understated luxury and coastal serenity.
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-x-9 gap-y-4 text-[15px] text-[#3f4741]">
-            {['About', 'Contact', 'Privacy Policy', 'Sustainability', 'Careers'].map(
-              (link) => (
-                <a className="transition-colors hover:text-[#1b211d]" href="/" key={link}>
-                  {link}
-                </a>
-              ),
-            )}
-          </div>
-          <p className="self-end text-[11px] uppercase leading-4 tracking-[0.12em] text-[#4f5751] md:text-right">
-            © 2024 Lumina Coast Resort &amp;
-            <br />
-            Spa. All rights reserved.
-          </p>
-        </div>
-      </footer>
+      <SiteFooter />
     </main>
   )
 }

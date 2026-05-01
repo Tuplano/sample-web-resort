@@ -1,19 +1,12 @@
 import { ChevronDown } from 'lucide-react'
 
+import { SiteFooter } from '@/components/layout/SiteFooter'
+import { SiteHeader } from '@/components/layout/SiteHeader'
 import type { Accommodation } from '@/types/home'
 import {
   AccommodationListingCard,
   CompactAccommodationCard,
 } from '@/features/accommodations/components/AccommodationListingCard'
-
-const navigationItems = [
-  { label: 'Home', href: '/' },
-  { label: 'Accommodations', href: '/accommodations' },
-  { label: 'Amenities', href: '/amenities' },
-  { label: 'Activities', href: '/#activities' },
-  { label: 'Gallery', href: '/#gallery' },
-  { label: 'Dining', href: '/#dining' },
-]
 
 const accommodations: Accommodation[] = [
   {
@@ -91,32 +84,7 @@ export function AccommodationsPage() {
 
   return (
     <main className="min-h-screen bg-[#f7f5ef] text-[#1b211d]">
-      <header className="flex h-[72px] items-center border-b border-[#e5e2da] bg-[#fbfaf6] px-6 md:px-10">
-        <a className="font-serif text-[13px] tracking-[0.24em]" href="/">
-          LUMINA COAST
-        </a>
-        <nav className="mx-auto hidden items-center gap-9 text-[12px] text-[#48514b] md:flex">
-          {navigationItems.map((item) => (
-            <a
-              className={`border-b py-1 transition-colors hover:border-[#1b211d] hover:text-[#1b211d] ${
-                item.label === 'Accommodations'
-                  ? 'border-[#1b211d] text-[#1b211d]'
-                  : 'border-transparent'
-              }`}
-              href={item.href}
-              key={item.label}
-            >
-              {item.label}
-            </a>
-          ))}
-        </nav>
-        <a
-          className="ml-auto inline-flex h-8 items-center justify-center rounded-full bg-[#07342f] px-5 text-[10px] font-semibold text-white transition-colors hover:bg-[#0e433c] md:ml-0"
-          href="#booking"
-        >
-          Book Now
-        </a>
-      </header>
+      <SiteHeader active="accommodations" />
 
       <section className="px-6 pb-14 pt-28 text-center md:px-10">
         <h1 className="font-serif text-[46px] leading-none md:text-[62px]">
@@ -175,40 +143,9 @@ export function AccommodationsPage() {
         </div>
       </section>
 
-      <footer className="mt-24 border-t border-[#e1dfd7] bg-[#fbfaf7]" id="booking">
-        <div className="grid gap-12 px-6 py-20 md:grid-cols-[1.4fr_0.7fr_0.7fr] md:px-10 lg:px-20">
-          <div>
-            <h2 className="font-serif text-[13px] tracking-[0.18em]">LUMINA COAST</h2>
-            <p className="mt-7 max-w-[340px] text-[13px] leading-7 text-[#697069]">
-              A coastal sanctuary dedicated to refined relaxation, understated
-              luxury, and the restorative power of nature.
-            </p>
-          </div>
-          <div>
-            <h3 className="text-[11px] font-semibold">Explore</h3>
-            <div className="mt-6 flex flex-col gap-4 text-[13px] text-[#525a54]">
-              {['About', 'Contact', 'Careers'].map((link) => (
-                <a className="transition-colors hover:text-[#1b211d]" href="/" key={link}>
-                  {link}
-                </a>
-              ))}
-            </div>
-          </div>
-          <div>
-            <h3 className="text-[11px] font-semibold">Legal</h3>
-            <div className="mt-6 flex flex-col gap-4 text-[13px] text-[#525a54]">
-              {['Privacy Policy', 'Sustainability'].map((link) => (
-                <a className="transition-colors hover:text-[#1b211d]" href="/" key={link}>
-                  {link}
-                </a>
-              ))}
-            </div>
-          </div>
-        </div>
-        <p className="border-t border-[#e1dfd7] px-6 py-8 text-center text-[10px] uppercase text-[#767c75]">
-          © 2024 Lumina Coast Resort &amp; Spa. All rights reserved.
-        </p>
-      </footer>
+      <div className="mt-24">
+        <SiteFooter />
+      </div>
     </main>
   )
 }
