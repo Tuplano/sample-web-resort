@@ -9,7 +9,7 @@ import {
 const navigationItems = [
   { label: 'Home', href: '/' },
   { label: 'Accommodations', href: '/accommodations' },
-  { label: 'Amenities', href: '/#amenities' },
+  { label: 'Amenities', href: '/amenities' },
   { label: 'Activities', href: '/#activities' },
   { label: 'Gallery', href: '/#gallery' },
   { label: 'Dining', href: '/#dining' },

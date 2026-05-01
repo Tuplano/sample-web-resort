@@ -6,7 +6,7 @@ import { AccommodationCard } from '@/features/home/components/AccommodationCard'
 const navigationItems = [
   { label: 'Home', href: '#top' },
   { label: 'Accommodations', href: '/accommodations' },
-  { label: 'Amenities', href: '#amenities' },
+  { label: 'Amenities', href: '/amenities' },
   { label: 'Activities', href: '#activities' },
   { label: 'Gallery', href: '#gallery' },
   { label: 'Dining', href: '#dining' },
