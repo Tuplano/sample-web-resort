@@ -10,12 +10,18 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AmenitiesRouteImport } from './routes/amenities'
+import { Route as ActivitiesRouteImport } from './routes/activities'
 import { Route as AccommodationsRouteImport } from './routes/accommodations'
 import { Route as IndexRouteImport } from './routes/index'
 
 const AmenitiesRoute = AmenitiesRouteImport.update({
   id: '/amenities',
   path: '/amenities',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ActivitiesRoute = ActivitiesRouteImport.update({
+  id: '/activities',
+  path: '/activities',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AccommodationsRoute = AccommodationsRouteImport.update({
@@ -32,30 +38,34 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/accommodations': typeof AccommodationsRoute
+  '/activities': typeof ActivitiesRoute
   '/amenities': typeof AmenitiesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/accommodations': typeof AccommodationsRoute
+  '/activities': typeof ActivitiesRoute
   '/amenities': typeof AmenitiesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/accommodations': typeof AccommodationsRoute
+  '/activities': typeof ActivitiesRoute
   '/amenities': typeof AmenitiesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/accommodations' | '/amenities'
+  fullPaths: '/' | '/accommodations' | '/activities' | '/amenities'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/accommodations' | '/amenities'
-  id: '__root__' | '/' | '/accommodations' | '/amenities'
+  to: '/' | '/accommodations' | '/activities' | '/amenities'
+  id: '__root__' | '/' | '/accommodations' | '/activities' | '/amenities'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AccommodationsRoute: typeof AccommodationsRoute
+  ActivitiesRoute: typeof ActivitiesRoute
   AmenitiesRoute: typeof AmenitiesRoute
 }
 
@@ -66,6 +76,13 @@ declare module '@tanstack/react-router' {
       path: '/amenities'
       fullPath: '/amenities'
       preLoaderRoute: typeof AmenitiesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/activities': {
+      id: '/activities'
+      path: '/activities'
+      fullPath: '/activities'
+      preLoaderRoute: typeof ActivitiesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/accommodations': {
@@ -88,6 +105,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccommodationsRoute: AccommodationsRoute,
+  ActivitiesRoute: ActivitiesRoute,
   AmenitiesRoute: AmenitiesRoute,
 }
 export const routeTree = rootRouteImport
