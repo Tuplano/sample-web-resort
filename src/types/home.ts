@@ -1,4 +1,5 @@
 export interface Accommodation {
+  id?: string
   name: string
   description?: string
   image: string
@@ -10,4 +11,7 @@ export interface Accommodation {
   price?: string
   priceSuffix?: string
   featured?: boolean
+  sortOrder?: number
+  createdAt?: string
+  updatedAt?: string
 }
