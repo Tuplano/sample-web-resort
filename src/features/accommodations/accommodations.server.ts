@@ -4,6 +4,7 @@ const { Schema, model, models } = mongoose
 
 import { requireMongoConnection } from '@/lib/mongodb'
 import type { Accommodation } from '@/types/home'
+import type { AccommodationInput } from '@/features/accommodations/accommodations.schemas'
 
 const accommodationSchema = new Schema(
   {
@@ -90,13 +91,6 @@ export async function createAccommodation(accommodation: Accommodation) {
     'MongoDB is not configured. Add MONGODB_URI to create accommodations.',
   )
 
-  if (accommodation.featured) {
-    await AccommodationModel.updateMany(
-      { featured: true },
-      { $set: { featured: false } },
-    )
-  }
-
   const created = await AccommodationModel.create(accommodation)
 
   return toAccommodation(created.toObject() as AccommodationDocument)
@@ -105,11 +99,6 @@ export async function createAccommodation(accommodation: Accommodation) {
 export async function setFeaturedAccommodation(id: string) {
   await requireMongoConnection(
     'MongoDB is not configured. Add MONGODB_URI to manage featured accommodations.',
-  )
-
-  await AccommodationModel.updateMany(
-    { featured: true },
-    { $set: { featured: false } },
   )
 
   const updated = await AccommodationModel.findByIdAndUpdate(
@@ -123,4 +112,31 @@ export async function setFeaturedAccommodation(id: string) {
   }
 
   return toAccommodation(updated.toObject() as AccommodationDocument)
+}
+
+export async function replaceAccommodations(items: AccommodationInput[]) {
+  await requireMongoConnection(
+    'MongoDB is not configured. Add MONGODB_URI to manage accommodations.',
+  )
+
+  const normalizedItems = items.map((item, index) => ({
+    ...item,
+    tags: item.tags?.filter(Boolean) ?? [],
+    sortOrder: item.sortOrder ?? index + 1,
+    featured: item.featured ?? false,
+  }))
+
+  await AccommodationModel.deleteMany({})
+
+  if (normalizedItems.length === 0) {
+    return []
+  }
+
+  const created = await AccommodationModel.insertMany(normalizedItems)
+
+  return sortAccommodations(
+    created.map((document) =>
+      toAccommodation(document.toObject() as AccommodationDocument),
+    ),
+  )
 }

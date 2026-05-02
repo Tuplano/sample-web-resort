@@ -2,6 +2,10 @@ import mongoose, { type InferSchemaType } from 'mongoose'
 
 import { requireMongoConnection } from '@/lib/mongodb'
 import type { Activity, WeeklyActivity } from '@/types/activities'
+import type {
+  ActivityInput,
+  WeeklyActivityInput,
+} from '@/features/activities/activities.schemas'
 
 const { Schema, model, models } = mongoose
 
@@ -114,5 +118,53 @@ export async function getActivitiesContent() {
   return {
     activities: sortByOrder(activities.map(toActivity)),
     weeklyActivities: sortByOrder(weeklyActivities.map(toWeeklyActivity)),
+  }
+}
+
+export async function replaceActivitiesContent({
+  activities,
+  weeklyActivities,
+}: {
+  activities: ActivityInput[]
+  weeklyActivities: WeeklyActivityInput[]
+}) {
+  await requireMongoConnection(
+    'MongoDB is not configured. Add MONGODB_URI to manage activities.',
+  )
+
+  const normalizedActivities = activities.map((item, index) => ({
+    ...item,
+    sortOrder: item.sortOrder ?? index + 1,
+  }))
+  const normalizedWeeklyActivities = weeklyActivities.map((item, index) => ({
+    ...item,
+    sortOrder: item.sortOrder ?? index + 1,
+  }))
+
+  await Promise.all([
+    ActivityModel.deleteMany({}),
+    WeeklyActivityModel.deleteMany({}),
+  ])
+
+  const [createdActivities, createdWeeklyActivities] = await Promise.all([
+    normalizedActivities.length > 0
+      ? ActivityModel.insertMany(normalizedActivities)
+      : Promise.resolve([]),
+    normalizedWeeklyActivities.length > 0
+      ? WeeklyActivityModel.insertMany(normalizedWeeklyActivities)
+      : Promise.resolve([]),
+  ])
+
+  return {
+    activities: sortByOrder(
+      createdActivities.map((document) =>
+        toActivity(document.toObject() as ActivityDocument),
+      ),
+    ),
+    weeklyActivities: sortByOrder(
+      createdWeeklyActivities.map((document) =>
+        toWeeklyActivity(document.toObject() as WeeklyActivityDocument),
+      ),
+    ),
   }
 }

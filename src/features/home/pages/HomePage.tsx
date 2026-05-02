@@ -2,30 +2,17 @@ import { ArrowUpRight } from 'lucide-react'
 
 import type { Accommodation } from '@/types/home'
 import { AccommodationCard } from '@/features/home/components/AccommodationCard'
+export function HomePage({
+  accommodations,
+}: {
+  accommodations: Accommodation[]
+}) {
+  const featuredAccommodations = accommodations.filter(
+    (accommodation) => accommodation.featured,
+  )
+  const primaryFeaturedAccommodation = featuredAccommodations[0]
+  const secondaryFeaturedAccommodations = featuredAccommodations.slice(1)
 
-const accommodations: [Accommodation, ...Accommodation[]] = [
-  {
-    name: 'Ocean View Suite',
-    description: 'Panoramic views and expansive living space.',
-    image:
-      'https://images.unsplash.com/photo-1560185008-b033106af5c3?auto=format&fit=crop&w=1200&q=82',
-    size: 'large',
-  },
-  {
-    name: 'Private Pool Villa',
-    image:
-      'https://images.unsplash.com/photo-1572331165267-854da2b10ccc?auto=format&fit=crop&w=800&q=82',
-    size: 'compact',
-  },
-  {
-    name: 'Family Villa',
-    image:
-      'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=800&q=82',
-    size: 'compact',
-  },
-]
-
-export function HomePage() {
   return (
     <>
       <section
@@ -95,14 +82,23 @@ export function HomePage() {
             Featured Accommodations
           </h2>
         </div>
-        <div className="grid gap-7 lg:grid-cols-[2.1fr_1fr]">
-          <AccommodationCard accommodation={accommodations[0]} />
-          <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-1">
-            {accommodations.slice(1).map((accommodation) => (
-              <AccommodationCard accommodation={accommodation} key={accommodation.name} />
-            ))}
+        {primaryFeaturedAccommodation ? (
+          <div className="grid gap-7 lg:grid-cols-[2.1fr_1fr]">
+            <AccommodationCard accommodation={primaryFeaturedAccommodation} />
+            <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-1">
+              {secondaryFeaturedAccommodations.map((accommodation) => (
+                <AccommodationCard
+                  accommodation={accommodation}
+                  key={accommodation.id ?? accommodation.name}
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="border border-dashed border-[#d4d0c6] bg-[#f7f5ef] px-6 py-12 text-center text-[13px] text-[#697069]">
+            No accommodations available yet.
+          </div>
+        )}
       </section>
 
     </>

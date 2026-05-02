@@ -2,6 +2,10 @@ import mongoose, { type InferSchemaType } from 'mongoose'
 
 import { requireMongoConnection } from '@/lib/mongodb'
 import type { DiningHighlight, MenuItem } from '@/types/dining'
+import type {
+  DiningHighlightInput,
+  MenuItemInput,
+} from '@/features/dining/dining.schemas'
 
 const { Schema, model, models } = mongoose
 
@@ -118,5 +122,53 @@ export async function getDiningMenuContent() {
 
   return {
     menuItems: sortByOrder(menuItems.map(toMenuItem)),
+  }
+}
+
+export async function replaceDiningContent({
+  highlights,
+  menuItems,
+}: {
+  highlights: DiningHighlightInput[]
+  menuItems: MenuItemInput[]
+}) {
+  await requireMongoConnection(
+    'MongoDB is not configured. Add MONGODB_URI to manage dining content.',
+  )
+
+  const normalizedHighlights = highlights.map((item, index) => ({
+    ...item,
+    sortOrder: item.sortOrder ?? index + 1,
+  }))
+  const normalizedMenuItems = menuItems.map((item, index) => ({
+    ...item,
+    sortOrder: item.sortOrder ?? index + 1,
+  }))
+
+  await Promise.all([
+    DiningHighlightModel.deleteMany({}),
+    MenuItemModel.deleteMany({}),
+  ])
+
+  const [createdHighlights, createdMenuItems] = await Promise.all([
+    normalizedHighlights.length > 0
+      ? DiningHighlightModel.insertMany(normalizedHighlights)
+      : Promise.resolve([]),
+    normalizedMenuItems.length > 0
+      ? MenuItemModel.insertMany(normalizedMenuItems)
+      : Promise.resolve([]),
+  ])
+
+  return {
+    highlights: sortByOrder(
+      createdHighlights.map((document) =>
+        toDiningHighlight(document.toObject() as DiningHighlightDocument),
+      ),
+    ),
+    menuItems: sortByOrder(
+      createdMenuItems.map((document) =>
+        toMenuItem(document.toObject() as MenuItemDocument),
+      ),
+    ),
   }
 }

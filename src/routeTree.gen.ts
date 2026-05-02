@@ -20,6 +20,7 @@ import { Route as AccommodationsRouteImport } from './routes/accommodations'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DiningIndexRouteImport } from './routes/dining/index'
 import { Route as DiningMenuRouteImport } from './routes/dining/menu'
+import { Route as AdminContentRouteImport } from './routes/admin/content'
 
 const ReservationRoute = ReservationRouteImport.update({
   id: '/reservation',
@@ -76,6 +77,11 @@ const DiningMenuRoute = DiningMenuRouteImport.update({
   path: '/menu',
   getParentRoute: () => DiningRoute,
 } as any)
+const AdminContentRoute = AdminContentRouteImport.update({
+  id: '/admin/content',
+  path: '/admin/content',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -87,6 +93,7 @@ export interface FileRoutesByFullPath {
   '/faq': typeof FaqRoute
   '/gallery': typeof GalleryRoute
   '/reservation': typeof ReservationRoute
+  '/admin/content': typeof AdminContentRoute
   '/dining/menu': typeof DiningMenuRoute
   '/dining/': typeof DiningIndexRoute
 }
@@ -99,6 +106,7 @@ export interface FileRoutesByTo {
   '/faq': typeof FaqRoute
   '/gallery': typeof GalleryRoute
   '/reservation': typeof ReservationRoute
+  '/admin/content': typeof AdminContentRoute
   '/dining/menu': typeof DiningMenuRoute
   '/dining': typeof DiningIndexRoute
 }
@@ -113,6 +121,7 @@ export interface FileRoutesById {
   '/faq': typeof FaqRoute
   '/gallery': typeof GalleryRoute
   '/reservation': typeof ReservationRoute
+  '/admin/content': typeof AdminContentRoute
   '/dining/menu': typeof DiningMenuRoute
   '/dining/': typeof DiningIndexRoute
 }
@@ -128,6 +137,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/gallery'
     | '/reservation'
+    | '/admin/content'
     | '/dining/menu'
     | '/dining/'
   fileRoutesByTo: FileRoutesByTo
@@ -140,6 +150,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/gallery'
     | '/reservation'
+    | '/admin/content'
     | '/dining/menu'
     | '/dining'
   id:
@@ -153,6 +164,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/gallery'
     | '/reservation'
+    | '/admin/content'
     | '/dining/menu'
     | '/dining/'
   fileRoutesById: FileRoutesById
@@ -167,6 +179,7 @@ export interface RootRouteChildren {
   FaqRoute: typeof FaqRoute
   GalleryRoute: typeof GalleryRoute
   ReservationRoute: typeof ReservationRoute
+  AdminContentRoute: typeof AdminContentRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -248,6 +261,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DiningMenuRouteImport
       parentRoute: typeof DiningRoute
     }
+    '/admin/content': {
+      id: '/admin/content'
+      path: '/admin/content'
+      fullPath: '/admin/content'
+      preLoaderRoute: typeof AdminContentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -274,6 +294,7 @@ const rootRouteChildren: RootRouteChildren = {
   FaqRoute: FaqRoute,
   GalleryRoute: GalleryRoute,
   ReservationRoute: ReservationRoute,
+  AdminContentRoute: AdminContentRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

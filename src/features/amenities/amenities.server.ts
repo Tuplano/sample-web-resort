@@ -2,6 +2,7 @@ import mongoose, { type InferSchemaType } from 'mongoose'
 
 import { requireMongoConnection } from '@/lib/mongodb'
 import type { Amenity } from '@/types/amenities'
+import type { AmenityInput } from '@/features/amenities/amenities.schemas'
 
 const { Schema, model, models } = mongoose
 
@@ -70,4 +71,27 @@ export async function listAmenities() {
     .lean<AmenityDocument[]>()
 
   return sortAmenities(documents.map(toAmenity))
+}
+
+export async function replaceAmenities(items: AmenityInput[]) {
+  await requireMongoConnection(
+    'MongoDB is not configured. Add MONGODB_URI to manage amenities.',
+  )
+
+  const normalizedItems = items.map((item, index) => ({
+    ...item,
+    sortOrder: item.sortOrder ?? index + 1,
+  }))
+
+  await AmenityModel.deleteMany({})
+
+  if (normalizedItems.length === 0) {
+    return []
+  }
+
+  const created = await AmenityModel.insertMany(normalizedItems)
+
+  return sortAmenities(
+    created.map((document) => toAmenity(document.toObject() as AmenityDocument)),
+  )
 }
