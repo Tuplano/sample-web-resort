@@ -1,24 +1,74 @@
-import { ChevronDown } from 'lucide-react'
+import { useState } from 'react'
 
 import type { Accommodation } from '@/types/home'
+import { AccommodationListingCard } from '@/features/accommodations/components/AccommodationListingCard'
 import {
-  AccommodationListingCard,
-  CompactAccommodationCard,
-} from '@/features/accommodations/components/AccommodationListingCard'
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+
+type SortOption = 'featured' | 'name-asc' | 'price-low' | 'price-high'
+
+function parsePrice(price?: string) {
+  if (!price) {
+    return Number.MAX_SAFE_INTEGER
+  }
+
+  const numericPrice = Number(price.replace(/[^0-9.]/g, ''))
+
+  return Number.isFinite(numericPrice) ? numericPrice : Number.MAX_SAFE_INTEGER
+}
 
 export function AccommodationsPage({
   accommodations,
 }: {
   accommodations: Accommodation[]
 }) {
-  const featuredAccommodation = accommodations.find(
-    (accommodation) => accommodation.featured,
+  const [selectedTag, setSelectedTag] = useState('All')
+  const [sortBy, setSortBy] = useState<SortOption>('featured')
+
+  const availableTags = [
+    'All',
+    ...new Set(
+      accommodations.flatMap((accommodation) => accommodation.tags ?? []),
+    ),
+  ]
+
+  const filteredAccommodations = accommodations.filter((accommodation) =>
+    selectedTag === 'All'
+      ? true
+      : (accommodation.tags ?? []).includes(selectedTag),
   )
-  const standardAccommodations = accommodations.filter(
-    (accommodation) => !accommodation.featured,
-  )
-  const primaryAccommodations = standardAccommodations.slice(0, 2)
-  const compactAccommodations = standardAccommodations.slice(2)
+
+  const sortedAccommodations = [...filteredAccommodations].sort((left, right) => {
+    if (sortBy === 'name-asc') {
+      return left.name.localeCompare(right.name)
+    }
+
+    if (sortBy === 'price-low') {
+      return parsePrice(left.price) - parsePrice(right.price)
+    }
+
+    if (sortBy === 'price-high') {
+      return parsePrice(right.price) - parsePrice(left.price)
+    }
+
+    const leftOrder = left.sortOrder ?? Number.MAX_SAFE_INTEGER
+    const rightOrder = right.sortOrder ?? Number.MAX_SAFE_INTEGER
+
+    if (leftOrder !== rightOrder) {
+      return leftOrder - rightOrder
+    }
+
+    if (Boolean(left.featured) !== Boolean(right.featured)) {
+      return left.featured ? -1 : 1
+    }
+
+    return left.name.localeCompare(right.name)
+  })
 
   return (
     <>
@@ -36,47 +86,55 @@ export function AccommodationsPage({
       <section className="px-6 md:px-10" aria-label="Accommodation filters">
         <div className="flex flex-col gap-5 border-b border-[#dfddd5] pb-9 md:flex-row md:items-center md:justify-between lg:px-10">
           <div className="flex flex-wrap gap-3">
-            {['All Accommodations', 'Ocean View', 'Garden View'].map((filter) => (
+            {availableTags.map((filter) => (
               <button
-                className="h-7 rounded-full border border-[#9ca59e] bg-transparent px-4 text-[11px] text-[#24302a] transition-colors hover:border-[#07342f] hover:bg-[#07342f] hover:text-white"
+                className={`h-7 rounded-full border px-4 text-[11px] transition-colors ${
+                  selectedTag === filter
+                    ? 'border-[#07342f] bg-[#07342f] text-white'
+                    : 'border-[#9ca59e] bg-transparent text-[#24302a] hover:border-[#07342f] hover:bg-[#07342f] hover:text-white'
+                }`}
                 key={filter}
+                onClick={() => setSelectedTag(filter)}
                 type="button"
               >
-                {filter}
+                {filter === 'All' ? 'All Accommodations' : filter}
               </button>
             ))}
           </div>
-          <button
-            className="inline-flex h-8 items-center gap-4 self-start text-[11px] uppercase text-[#3d453f] md:self-auto"
-            type="button"
-          >
-            Sort By:
-            <span className="normal-case text-[#1b211d]">Featured</span>
-            <ChevronDown aria-hidden="true" size={14} strokeWidth={1.7} />
-          </button>
+          <div className="flex items-center gap-3 self-start md:self-auto">
+            <span className="text-[11px] uppercase text-[#3d453f]">Sort By:</span>
+            <Select
+              onValueChange={(value) => setSortBy(value as SortOption)}
+              value={sortBy}
+            >
+              <SelectTrigger className="w-[170px] border-[#c9c3b7] bg-[#fffdf8] text-[#1b211d]">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="featured">Featured order</SelectItem>
+                <SelectItem value="name-asc">Name A-Z</SelectItem>
+                <SelectItem value="price-low">Price low to high</SelectItem>
+                <SelectItem value="price-high">Price high to low</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </section>
 
       <section className="px-6 py-16 md:px-10 lg:px-20 lg:py-20">
-        {featuredAccommodation ? (
-          <AccommodationListingCard accommodation={featuredAccommodation} />
-        ) : null}
-        <div className="mt-8 grid gap-8 lg:grid-cols-2">
-          {primaryAccommodations.map((accommodation) => (
+        <div className="grid gap-8 lg:grid-cols-2">
+          {sortedAccommodations.map((accommodation) => (
             <AccommodationListingCard
               accommodation={accommodation}
-              key={accommodation.name}
+              key={accommodation.id ?? accommodation.name}
             />
           ))}
         </div>
-        <div className="mt-8 grid gap-8 lg:grid-cols-2">
-          {compactAccommodations.map((accommodation) => (
-            <CompactAccommodationCard
-              accommodation={accommodation}
-              key={accommodation.name}
-            />
-          ))}
-        </div>
+        {sortedAccommodations.length === 0 ? (
+          <div className="border border-dashed border-[#d8d3c8] bg-[#fbfaf7] px-6 py-12 text-center text-[13px] text-[#626962]">
+            No accommodations match this filter yet.
+          </div>
+        ) : null}
       </section>
 
     </>

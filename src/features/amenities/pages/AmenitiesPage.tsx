@@ -33,7 +33,7 @@ export function AmenitiesPage({ amenities }: { amenities: Amenity[] }) {
               detail is designed to enhance your coastal retreat.
             </p>
           </div>
-          <div className="grid auto-rows-fr gap-3 lg:grid-cols-3">
+          <div className="grid gap-4 lg:grid-cols-3 lg:auto-rows-[360px]">
             {amenities.map((amenity) => (
               <AmenityTile amenity={amenity} key={amenity.name} />
             ))}

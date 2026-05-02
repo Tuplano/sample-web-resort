@@ -4,7 +4,7 @@ export interface Amenity {
   description: string
   category: string
   image: string
-  layout: 'wide' | 'tall' | 'standard'
+  layout: 'wide' | 'wide-full' | 'tall' | 'standard'
   sortOrder?: number
   createdAt?: string
   updatedAt?: string

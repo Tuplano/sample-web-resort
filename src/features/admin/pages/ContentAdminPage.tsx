@@ -96,6 +96,7 @@ const amenityFields: EditorField<DraftAmenity>[] = [
     kind: 'select',
     options: [
       { label: 'Wide', value: 'wide' },
+      { label: 'Wide Full', value: 'wide-full' },
       { label: 'Tall', value: 'tall' },
       { label: 'Standard', value: 'standard' },
     ],

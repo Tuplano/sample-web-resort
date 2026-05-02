@@ -5,7 +5,7 @@ export const amenityInputSchema = z.object({
   description: z.string().trim().min(1, 'Description is required'),
   category: z.string().trim().min(1, 'Category is required'),
   image: z.url('Image must be a valid URL'),
-  layout: z.enum(['wide', 'tall', 'standard']),
+  layout: z.enum(['wide', 'wide-full', 'tall', 'standard']),
   sortOrder: z.number().int().nonnegative().optional(),
 })
 

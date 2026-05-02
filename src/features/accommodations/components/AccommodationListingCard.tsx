@@ -7,84 +7,7 @@ export function AccommodationListingCard({
 }: {
   accommodation: Accommodation
 }) {
-  if (accommodation.featured) {
-    return <FeaturedAccommodationCard accommodation={accommodation} />
-  }
-
-  return (
-    <article className="overflow-hidden rounded-[8px] border border-[#dfddd5] bg-[#fffdf8]">
-      <img
-        alt=""
-        className="aspect-[1.65/1] w-full object-cover"
-        src={accommodation.image}
-      />
-      <div className="p-8">
-        <TagList tags={accommodation.tags ?? []} />
-        <h2 className="mt-5 font-serif text-[30px] leading-tight text-[#1b211d]">
-          {accommodation.name}
-        </h2>
-        <p className="mt-5 min-h-[66px] text-[13px] leading-6 text-[#626962]">
-          {accommodation.description}
-        </p>
-        <AmenityRow accommodation={accommodation} className="mt-7" />
-      </div>
-      <div className="flex items-end justify-between border-t border-[#e6e3dc] px-8 py-6">
-        <p className="font-serif text-[30px] leading-none text-[#111713]">
-          {accommodation.price}
-          <span className="font-sans text-[14px] text-[#3d453f]">
-            {accommodation.priceSuffix}
-          </span>
-        </p>
-        <a
-          className="inline-flex h-8 items-center justify-center rounded-full border border-[#8d9890] px-6 text-[11px] text-[#20302a] transition-colors hover:border-[#07342f] hover:bg-[#07342f] hover:text-white"
-          href="#booking"
-        >
-          Book Now
-        </a>
-      </div>
-    </article>
-  )
-}
-
-function FeaturedAccommodationCard({ accommodation }: { accommodation: Accommodation }) {
-  return (
-    <article className="grid overflow-hidden rounded-[8px] border border-[#dfddd5] bg-[#fffdf8] lg:grid-cols-[2fr_1fr]">
-      <img
-        alt=""
-        className="h-full min-h-[360px] w-full object-cover"
-        src={accommodation.image}
-      />
-      <div className="flex flex-col p-8 lg:p-10">
-        <TagList tags={accommodation.tags ?? []} />
-        <h2 className="mt-5 font-serif text-[42px] leading-[0.98] text-[#1b211d]">
-          {accommodation.name}
-        </h2>
-        <p className="mt-8 text-[13px] leading-6 text-[#626962]">
-          {accommodation.description}
-        </p>
-        <AmenityRow accommodation={accommodation} className="mt-9" />
-        <div className="mt-8 border-t border-[#e6e3dc] pt-7">
-          <p className="text-[12px] text-[#626962]">Starting from</p>
-          <div className="mt-1 flex items-end justify-between gap-6">
-            <p className="font-serif text-[34px] leading-none text-[#111713]">
-              {accommodation.price}
-              <span className="block font-sans text-[25px]">
-                {accommodation.priceSuffix}
-              </span>
-            </p>
-            <a
-              className="inline-flex size-[58px] items-center justify-center rounded-full bg-[#07342f] text-center text-[10px] font-semibold leading-3 text-white transition-colors hover:bg-[#0e433c]"
-              href="#booking"
-            >
-              Book
-              <br />
-              Now
-            </a>
-          </div>
-        </div>
-      </div>
-    </article>
-  )
+  return <StandardAccommodationCard accommodation={accommodation} />
 }
 
 function TagList({ tags }: { tags: string[] }) {
@@ -132,36 +55,94 @@ export function CompactAccommodationCard({
 }: {
   accommodation: Accommodation
 }) {
+  return <StandardAccommodationCard accommodation={accommodation} />
+}
+
+function StandardAccommodationCard({
+  accommodation,
+}: {
+  accommodation: Accommodation
+}) {
   return (
     <article className="overflow-hidden rounded-[8px] border border-[#dfddd5] bg-[#fffdf8]">
       <img
         alt=""
-        className="aspect-[2.15/1] w-full object-cover"
+        className="aspect-[1.65/1] w-full object-cover"
         src={accommodation.image}
       />
-      <div className="p-7">
-        <h2 className="font-serif text-[24px] leading-tight text-[#1b211d]">
-          {accommodation.name}
-        </h2>
-        <p className="mt-5 min-h-[58px] text-[13px] leading-6 text-[#626962]">
-          {accommodation.description}
-        </p>
-        <div className="mt-7 flex items-end justify-between gap-5">
-          <p className="font-serif text-[22px] leading-none text-[#111713]">
-            {accommodation.price}
-            <span className="font-sans text-[12px] text-[#3d453f]">
-              {accommodation.priceSuffix}
-            </span>
-          </p>
-          <a
-            className="inline-flex items-center gap-2 text-[11px] text-[#20302a] transition-colors hover:text-[#07342f]"
-            href="#booking"
-          >
-            Book Now
-            <ArrowUpRight aria-hidden="true" size={13} strokeWidth={1.7} />
-          </a>
-        </div>
+      <div className="flex flex-col">
+        <CardBody
+          accommodation={accommodation}
+          descriptionClassName="min-h-[66px]"
+          titleClassName="text-[30px]"
+        />
+        <CardFooter accommodation={accommodation} />
       </div>
     </article>
+  )
+}
+
+function CardBody({
+  accommodation,
+  bodyClassName,
+  descriptionClassName,
+  titleClassName,
+}: {
+  accommodation: Accommodation
+  bodyClassName?: string
+  descriptionClassName?: string
+  titleClassName?: string
+}) {
+  return (
+    <div className={bodyClassName ?? 'p-8'}>
+      <TagList tags={accommodation.tags ?? []} />
+      <h2
+        className={`mt-5 font-serif leading-tight text-[#1b211d] ${titleClassName ?? 'text-[30px]'}`}
+      >
+        {accommodation.name}
+      </h2>
+      <p
+        className={`mt-5 text-[13px] leading-6 text-[#626962] ${descriptionClassName ?? ''}`}
+      >
+        {accommodation.description}
+      </p>
+      <AmenityRow accommodation={accommodation} className="mt-7" />
+    </div>
+  )
+}
+
+function CardFooter({
+  accommodation,
+  footerClassName,
+  priceClassName,
+  priceSuffixClassName,
+}: {
+  accommodation: Accommodation
+  footerClassName?: string
+  priceClassName?: string
+  priceSuffixClassName?: string
+}) {
+  return (
+    <div
+      className={`flex items-end justify-between gap-5 border-t border-[#e6e3dc] ${footerClassName ?? 'px-8 py-6'}`}
+    >
+      <p
+        className={`font-serif leading-none text-[#111713] ${priceClassName ?? 'text-[30px]'}`}
+      >
+        {accommodation.price}
+        <span
+          className={`font-sans text-[#3d453f] ${priceSuffixClassName ?? 'text-[14px]'}`}
+        >
+          {accommodation.priceSuffix}
+        </span>
+      </p>
+      <a
+        className="inline-flex h-9 items-center justify-center gap-2 rounded-full border border-[#8d9890] px-5 text-[11px] text-[#20302a] transition-colors hover:border-[#07342f] hover:bg-[#07342f] hover:text-white"
+        href="#booking"
+      >
+        Book Now
+        <ArrowUpRight aria-hidden="true" size={13} strokeWidth={1.7} />
+      </a>
+    </div>
   )
 }

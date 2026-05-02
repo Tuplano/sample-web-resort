@@ -14,7 +14,7 @@ const amenitySchema = new Schema(
     image: { type: String, required: true, trim: true },
     layout: {
       type: String,
-      enum: ['wide', 'tall', 'standard'],
+      enum: ['wide', 'wide-full', 'tall', 'standard'],
       required: true,
     },
     sortOrder: { type: Number, default: 0 },
