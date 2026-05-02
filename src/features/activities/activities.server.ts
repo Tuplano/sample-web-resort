@@ -1,10 +1,6 @@
 import mongoose, { type InferSchemaType } from 'mongoose'
 
-import {
-  activitiesSeed,
-  weeklyActivitiesSeed,
-} from '@/features/activities/activities.seed'
-import { connectToMongo } from '@/lib/mongodb'
+import { requireMongoConnection } from '@/lib/mongodb'
 import type { Activity, WeeklyActivity } from '@/types/activities'
 
 const { Schema, model, models } = mongoose
@@ -103,38 +99,10 @@ function sortByOrder<T extends { sortOrder?: number; name?: string; day?: string
   })
 }
 
-async function ensureSeedData() {
-  const [activityCount, weeklyCount] = await Promise.all([
-    ActivityModel.countDocuments(),
-    WeeklyActivityModel.countDocuments(),
-  ])
-
-  const writes: Promise<unknown>[] = []
-
-  if (activityCount === 0) {
-    writes.push(ActivityModel.insertMany(activitiesSeed))
-  }
-
-  if (weeklyCount === 0) {
-    writes.push(WeeklyActivityModel.insertMany(weeklyActivitiesSeed))
-  }
-
-  if (writes.length > 0) {
-    await Promise.all(writes)
-  }
-}
-
 export async function getActivitiesContent() {
-  const connection = await connectToMongo()
-
-  if (!connection) {
-    return {
-      activities: sortByOrder(activitiesSeed),
-      weeklyActivities: sortByOrder(weeklyActivitiesSeed),
-    }
-  }
-
-  await ensureSeedData()
+  await requireMongoConnection(
+    'MongoDB is not configured. Add MONGODB_URI to load activities.',
+  )
 
   const [activities, weeklyActivities] = await Promise.all([
     ActivityModel.find().sort({ sortOrder: 1, name: 1 }).lean<ActivityDocument[]>(),

@@ -1,10 +1,6 @@
 import mongoose, { type InferSchemaType } from 'mongoose'
 
-import {
-  diningHighlightsSeed,
-  diningMenuSeed,
-} from '@/features/dining/dining.seed'
-import { connectToMongo } from '@/lib/mongodb'
+import { requireMongoConnection } from '@/lib/mongodb'
 import type { DiningHighlight, MenuItem } from '@/types/dining'
 
 const { Schema, model, models } = mongoose
@@ -97,37 +93,10 @@ function sortByOrder<T extends { sortOrder?: number; name: string }>(items: T[])
   })
 }
 
-async function ensureSeedData() {
-  const [highlightCount, menuCount] = await Promise.all([
-    DiningHighlightModel.countDocuments(),
-    MenuItemModel.countDocuments(),
-  ])
-
-  const writes: Promise<unknown>[] = []
-
-  if (highlightCount === 0) {
-    writes.push(DiningHighlightModel.insertMany(diningHighlightsSeed))
-  }
-
-  if (menuCount === 0) {
-    writes.push(MenuItemModel.insertMany(diningMenuSeed))
-  }
-
-  if (writes.length > 0) {
-    await Promise.all(writes)
-  }
-}
-
 export async function getDiningPageContent() {
-  const connection = await connectToMongo()
-
-  if (!connection) {
-    return {
-      highlights: sortByOrder(diningHighlightsSeed),
-    }
-  }
-
-  await ensureSeedData()
+  await requireMongoConnection(
+    'MongoDB is not configured. Add MONGODB_URI to load dining content.',
+  )
 
   const highlights = await DiningHighlightModel.find()
     .sort({ sortOrder: 1, name: 1 })
@@ -139,15 +108,9 @@ export async function getDiningPageContent() {
 }
 
 export async function getDiningMenuContent() {
-  const connection = await connectToMongo()
-
-  if (!connection) {
-    return {
-      menuItems: sortByOrder(diningMenuSeed),
-    }
-  }
-
-  await ensureSeedData()
+  await requireMongoConnection(
+    'MongoDB is not configured. Add MONGODB_URI to load dining menu items.',
+  )
 
   const menuItems = await MenuItemModel.find()
     .sort({ category: 1, sortOrder: 1, name: 1 })

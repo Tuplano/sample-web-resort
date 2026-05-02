@@ -1,7 +1,14 @@
 import type { Activity, WeeklyActivity } from '@/types/activities'
 import { ActivityCard } from '@/features/activities/components/ActivityCard'
-import { activityFilters } from '@/features/activities/activities.seed'
 import { WeeklyRhythm } from '@/features/activities/components/WeeklyRhythm'
+
+const activityFilters = [
+  'All Activities',
+  'Water Sports',
+  'Land Adventures',
+  'Cultural Tours',
+  'Wellness',
+]
 
 export function ActivitiesPage({
   activities,

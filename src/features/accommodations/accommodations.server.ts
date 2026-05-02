@@ -2,8 +2,7 @@ import mongoose, { type InferSchemaType } from 'mongoose'
 
 const { Schema, model, models } = mongoose
 
-import { accommodationSeed } from '@/features/accommodations/accommodation.seed'
-import { connectToMongo, requireMongoConnection } from '@/lib/mongodb'
+import { requireMongoConnection } from '@/lib/mongodb'
 import type { Accommodation } from '@/types/home'
 
 const accommodationSchema = new Schema(
@@ -74,24 +73,10 @@ function sortAccommodations(items: Accommodation[]) {
   })
 }
 
-async function ensureSeedData() {
-  const existingCount = await AccommodationModel.countDocuments()
-
-  if (existingCount > 0) {
-    return
-  }
-
-  await AccommodationModel.insertMany(accommodationSeed)
-}
-
 export async function listAccommodations() {
-  const connection = await connectToMongo()
-
-  if (!connection) {
-    return sortAccommodations(accommodationSeed)
-  }
-
-  await ensureSeedData()
+  await requireMongoConnection(
+    'MongoDB is not configured. Add MONGODB_URI to load accommodations.',
+  )
 
   const documents = await AccommodationModel.find()
     .sort({ featured: -1, sortOrder: 1, name: 1 })

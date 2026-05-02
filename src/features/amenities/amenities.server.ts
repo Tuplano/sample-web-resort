@@ -1,7 +1,6 @@
 import mongoose, { type InferSchemaType } from 'mongoose'
 
-import { amenitiesSeed } from '@/features/amenities/amenities.seed'
-import { connectToMongo } from '@/lib/mongodb'
+import { requireMongoConnection } from '@/lib/mongodb'
 import type { Amenity } from '@/types/amenities'
 
 const { Schema, model, models } = mongoose
@@ -61,24 +60,10 @@ function sortAmenities(items: Amenity[]) {
   })
 }
 
-async function ensureSeedData() {
-  const existingCount = await AmenityModel.countDocuments()
-
-  if (existingCount > 0) {
-    return
-  }
-
-  await AmenityModel.insertMany(amenitiesSeed)
-}
-
 export async function listAmenities() {
-  const connection = await connectToMongo()
-
-  if (!connection) {
-    return sortAmenities(amenitiesSeed)
-  }
-
-  await ensureSeedData()
+  await requireMongoConnection(
+    'MongoDB is not configured. Add MONGODB_URI to load amenities.',
+  )
 
   const documents = await AmenityModel.find()
     .sort({ sortOrder: 1, name: 1 })
