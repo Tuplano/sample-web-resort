@@ -1,5 +1,15 @@
 import { z } from 'zod'
 
+export const weeklyActivityDays = [
+  'Mon',
+  'Tue',
+  'Wed',
+  'Thu',
+  'Fri',
+  'Sat',
+  'Sun',
+] as const
+
 export const activityInputSchema = z.object({
   name: z.string().trim().min(1, 'Name is required'),
   description: z.string().trim().min(1, 'Description is required'),
@@ -10,11 +20,10 @@ export const activityInputSchema = z.object({
 })
 
 export const weeklyActivityInputSchema = z.object({
-  day: z.string().trim().min(1, 'Day is required'),
-  time: z.string().trim().min(1, 'Time is required'),
+  day: z.enum(weeklyActivityDays),
+  time: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, 'Time must use HH:MM'),
   name: z.string().trim().min(1, 'Name is required'),
   tone: z.enum(['blue', 'green', 'sand', 'stone']),
-  sortOrder: z.number().int().nonnegative().optional(),
 })
 
 export type ActivityInput = z.infer<typeof activityInputSchema>

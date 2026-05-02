@@ -1,11 +1,16 @@
 import mongoose, { type InferSchemaType } from 'mongoose'
 
 import { requireMongoConnection } from '@/lib/mongodb'
-import type { Activity, WeeklyActivity } from '@/types/activities'
+import type {
+  Activity,
+  WeeklyActivity,
+  WeeklyActivityDay,
+} from '@/types/activities'
 import type {
   ActivityInput,
   WeeklyActivityInput,
 } from '@/features/activities/activities.schemas'
+import { weeklyActivityDays } from '@/features/activities/activities.schemas'
 
 const { Schema, model, models } = mongoose
 
@@ -34,7 +39,6 @@ const weeklyActivitySchema = new Schema(
       enum: ['blue', 'green', 'sand', 'stone'],
       required: true,
     },
-    sortOrder: { type: Number, default: 0 },
   },
   {
     collection: 'weekly_activities',
@@ -78,11 +82,10 @@ function toActivity(doc: ActivityDocument): Activity {
 function toWeeklyActivity(doc: WeeklyActivityDocument): WeeklyActivity {
   return {
     id: doc._id.toString(),
-    day: doc.day,
+    day: doc.day as WeeklyActivityDay,
     time: doc.time,
     name: doc.name,
     tone: doc.tone,
-    sortOrder: doc.sortOrder,
     createdAt: doc.createdAt.toISOString(),
     updatedAt: doc.updatedAt.toISOString(),
   }
@@ -103,6 +106,28 @@ function sortByOrder<T extends { sortOrder?: number; name?: string; day?: string
   })
 }
 
+const weeklyActivityDayOrder = new Map<WeeklyActivityDay, number>(
+  weeklyActivityDays.map((day, index) => [day, index]),
+)
+
+function sortWeeklyActivities(items: WeeklyActivity[]) {
+  return [...items].sort((left, right) => {
+    const leftDay = weeklyActivityDayOrder.get(left.day) ?? Number.MAX_SAFE_INTEGER
+    const rightDay =
+      weeklyActivityDayOrder.get(right.day) ?? Number.MAX_SAFE_INTEGER
+
+    if (leftDay !== rightDay) {
+      return leftDay - rightDay
+    }
+
+    if (left.time !== right.time) {
+      return left.time.localeCompare(right.time)
+    }
+
+    return left.name.localeCompare(right.name)
+  })
+}
+
 export async function getActivitiesContent() {
   await requireMongoConnection(
     'MongoDB is not configured. Add MONGODB_URI to load activities.',
@@ -111,13 +136,13 @@ export async function getActivitiesContent() {
   const [activities, weeklyActivities] = await Promise.all([
     ActivityModel.find().sort({ sortOrder: 1, name: 1 }).lean<ActivityDocument[]>(),
     WeeklyActivityModel.find()
-      .sort({ sortOrder: 1, day: 1 })
+      .sort({ day: 1, time: 1, name: 1 })
       .lean<WeeklyActivityDocument[]>(),
   ])
 
   return {
     activities: sortByOrder(activities.map(toActivity)),
-    weeklyActivities: sortByOrder(weeklyActivities.map(toWeeklyActivity)),
+    weeklyActivities: sortWeeklyActivities(weeklyActivities.map(toWeeklyActivity)),
   }
 }
 
@@ -136,10 +161,6 @@ export async function replaceActivitiesContent({
     ...item,
     sortOrder: item.sortOrder ?? index + 1,
   }))
-  const normalizedWeeklyActivities = weeklyActivities.map((item, index) => ({
-    ...item,
-    sortOrder: item.sortOrder ?? index + 1,
-  }))
 
   await Promise.all([
     ActivityModel.deleteMany({}),
@@ -150,8 +171,8 @@ export async function replaceActivitiesContent({
     normalizedActivities.length > 0
       ? ActivityModel.insertMany(normalizedActivities)
       : Promise.resolve([]),
-    normalizedWeeklyActivities.length > 0
-      ? WeeklyActivityModel.insertMany(normalizedWeeklyActivities)
+    weeklyActivities.length > 0
+      ? WeeklyActivityModel.insertMany(weeklyActivities)
       : Promise.resolve([]),
   ])
 
@@ -161,7 +182,7 @@ export async function replaceActivitiesContent({
         toActivity(document.toObject() as ActivityDocument),
       ),
     ),
-    weeklyActivities: sortByOrder(
+    weeklyActivities: sortWeeklyActivities(
       createdWeeklyActivities.map((document) =>
         toWeeklyActivity(document.toObject() as WeeklyActivityDocument),
       ),

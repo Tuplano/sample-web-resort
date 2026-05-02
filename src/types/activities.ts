@@ -1,3 +1,12 @@
+export type WeeklyActivityDay =
+  | 'Mon'
+  | 'Tue'
+  | 'Wed'
+  | 'Thu'
+  | 'Fri'
+  | 'Sat'
+  | 'Sun'
+
 export interface Activity {
   id?: string
   name: string
@@ -12,11 +21,10 @@ export interface Activity {
 
 export interface WeeklyActivity {
   id?: string
-  day: string
+  day: WeeklyActivityDay
   time: string
   name: string
   tone: 'blue' | 'green' | 'sand' | 'stone'
-  sortOrder?: number
   createdAt?: string
   updatedAt?: string
 }

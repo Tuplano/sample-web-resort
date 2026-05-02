@@ -4,6 +4,7 @@ import { useServerFn } from '@tanstack/react-start'
 
 import type { AdminContentInput } from '@/features/admin/content.schemas'
 import { saveAdminContent } from '@/features/admin/content.functions'
+import { weeklyActivityDays } from '@/features/activities/activities.schemas'
 import type { Accommodation } from '@/types/home'
 import type { Amenity } from '@/types/amenities'
 import type { Activity, WeeklyActivity } from '@/types/activities'
@@ -42,7 +43,7 @@ type DraftMenuItem = AdminContentInput['menuItems'][number]
 type EditorField<T> = {
   key: keyof T & string
   label: string
-  kind: 'text' | 'textarea' | 'number' | 'select' | 'checkbox' | 'tags'
+  kind: 'text' | 'textarea' | 'number' | 'select' | 'checkbox' | 'tags' | 'time'
   options?: Array<{ label: string; value: string }>
   placeholder?: string
   fullWidth?: boolean
@@ -119,8 +120,13 @@ const activityFields: EditorField<DraftActivity>[] = [
 ]
 
 const weeklyActivityFields: EditorField<DraftWeeklyActivity>[] = [
-  { key: 'day', label: 'Day', kind: 'text' },
-  { key: 'time', label: 'Time', kind: 'text' },
+  {
+    key: 'day',
+    label: 'Day',
+    kind: 'select',
+    options: weeklyActivityDays.map((day) => ({ label: day, value: day })),
+  },
+  { key: 'time', label: 'Time', kind: 'time' },
   { key: 'name', label: 'Name', kind: 'text' },
   {
     key: 'tone',
@@ -133,7 +139,6 @@ const weeklyActivityFields: EditorField<DraftWeeklyActivity>[] = [
       { label: 'Stone', value: 'stone' },
     ],
   },
-  { key: 'sortOrder', label: 'Sort order', kind: 'number' },
 ]
 
 const diningHighlightFields: EditorField<DraftDiningHighlight>[] = [
@@ -207,7 +212,6 @@ function toDraftContent(initialContent: ContentAdminPageProps['initialContent'])
       time: item.time,
       name: item.name,
       tone: item.tone,
-      sortOrder: item.sortOrder,
     })),
     diningHighlights: initialContent.diningHighlights.map((item) => ({
       name: item.name,
@@ -399,11 +403,10 @@ export function ContentAdminPage({ initialContent }: ContentAdminPageProps) {
             <CollectionEditor
               addLabel="Add weekly activity"
               createItem={(): DraftWeeklyActivity => ({
-                day: '',
-                time: '',
+                day: 'Mon',
+                time: '07:00',
                 name: '',
                 tone: 'blue',
-                sortOrder: draft.weeklyActivities.length + 1,
               })}
               description="Control the weekly rhythm schedule and color tone for each entry."
               fields={weeklyActivityFields}
@@ -639,6 +642,17 @@ function FieldInput<T extends Record<string, unknown>>({
         onChange={(event) => onChange(Number(event.target.value) || 0)}
         type="number"
         value={typeof value === 'number' ? value : 0}
+      />
+    )
+  }
+
+  if (field.kind === 'time') {
+    return (
+      <Input
+        id={id}
+        onChange={(event) => onChange(event.target.value)}
+        type="time"
+        value={typeof value === 'string' ? value : ''}
       />
     )
   }
