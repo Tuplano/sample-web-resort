@@ -1,14 +1,16 @@
+import { useEffect, useState } from 'react'
+
 import type { Activity, WeeklyActivity } from '@/types/activities'
 import { ActivityCard } from '@/features/activities/components/ActivityCard'
 import { WeeklyRhythm } from '@/features/activities/components/WeeklyRhythm'
-
-const activityFilters = [
-  'All Activities',
-  'Water Sports',
-  'Land Adventures',
-  'Cultural Tours',
-  'Wellness',
-]
+import {
+  type CarouselApi,
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel'
 
 export function ActivitiesPage({
   activities,
@@ -17,6 +19,49 @@ export function ActivitiesPage({
   activities: Activity[]
   weeklyActivities: WeeklyActivity[]
 }) {
+  const [selectedCategory, setSelectedCategory] = useState('All Activities')
+  const [carouselApi, setCarouselApi] = useState<CarouselApi>()
+  const [selectedIndex, setSelectedIndex] = useState(0)
+
+  const activityFilters = [
+    'All Activities',
+    ...new Set(activities.map((activity) => activity.category).filter(Boolean)),
+  ]
+
+  const filteredActivities = activities.filter((activity) =>
+    selectedCategory === 'All Activities'
+      ? true
+      : activity.category === selectedCategory,
+  )
+
+  useEffect(() => {
+    if (!carouselApi) {
+      return
+    }
+
+    const updateSelectedIndex = () => {
+      setSelectedIndex(carouselApi.selectedScrollSnap())
+    }
+
+    updateSelectedIndex()
+    carouselApi.on('select', updateSelectedIndex)
+    carouselApi.on('reInit', updateSelectedIndex)
+
+    return () => {
+      carouselApi.off('select', updateSelectedIndex)
+      carouselApi.off('reInit', updateSelectedIndex)
+    }
+  }, [carouselApi])
+
+  useEffect(() => {
+    if (!carouselApi) {
+      return
+    }
+
+    carouselApi.scrollTo(0)
+    setSelectedIndex(0)
+  }, [carouselApi, selectedCategory])
+
   return (
     <>
       <section
@@ -47,8 +92,13 @@ export function ActivitiesPage({
         <div className="flex justify-center gap-10 overflow-x-auto px-6 py-5 text-[10px] uppercase text-[#7a8079] md:px-10 lg:px-20">
           {activityFilters.map((filter) => (
             <button
-              className="shrink-0 border-b border-transparent pb-1 transition-colors hover:border-[#1b211d] hover:text-[#1b211d] first:border-[#1b211d] first:text-[#1b211d]"
+              className={`shrink-0 border-b pb-1 transition-colors ${
+                selectedCategory === filter
+                  ? 'border-[#1b211d] text-[#1b211d]'
+                  : 'border-transparent hover:border-[#1b211d] hover:text-[#1b211d]'
+              }`}
               key={filter}
+              onClick={() => setSelectedCategory(filter)}
               type="button"
             >
               {filter}
@@ -58,11 +108,40 @@ export function ActivitiesPage({
       </section>
 
       <section className="px-6 py-20 md:px-10 lg:px-20 lg:py-24" id="activities">
-        <div className="grid gap-8 lg:grid-cols-3">
-          {activities.map((activity) => (
-            <ActivityCard activity={activity} key={activity.name} />
-          ))}
-        </div>
+        <Carousel
+          className="mx-auto w-full max-w-[1680px] px-0"
+          opts={{
+            align: 'center',
+            containScroll: false,
+          }}
+          setApi={setCarouselApi}
+        >
+          <CarouselContent className="-ml-5 md:-ml-6">
+            {filteredActivities.map((activity, index) => (
+              <CarouselItem
+                className="basis-[94%] pl-5 sm:basis-[86%] md:basis-[74%] md:pl-6 lg:basis-[66%] xl:basis-[58%]"
+                key={activity.id ?? activity.name}
+              >
+                <div
+                  className={`transition duration-300 ${
+                    index === selectedIndex
+                      ? 'scale-100 opacity-100'
+                      : 'scale-[0.94] opacity-55'
+                  }`}
+                >
+                  <ActivityCard activity={activity} />
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="left-2 border-[#cfc8bc] bg-[#fffdf8] text-[#1b211d] hover:border-[#07342f] hover:bg-[#07342f] hover:text-white disabled:bg-[#f2eee6] disabled:text-[#a19c93] md:left-4" />
+          <CarouselNext className="right-2 border-[#cfc8bc] bg-[#fffdf8] text-[#1b211d] hover:border-[#07342f] hover:bg-[#07342f] hover:text-white disabled:bg-[#f2eee6] disabled:text-[#a19c93] md:right-4" />
+        </Carousel>
+        {filteredActivities.length === 0 ? (
+          <div className="mt-8 border border-dashed border-[#d8d3c8] bg-[#fbfaf7] px-6 py-12 text-center text-[13px] text-[#626962]">
+            No activities match this category yet.
+          </div>
+        ) : null}
       </section>
 
       <section className="bg-[#efede7] px-6 py-20 md:px-10 lg:py-24">
