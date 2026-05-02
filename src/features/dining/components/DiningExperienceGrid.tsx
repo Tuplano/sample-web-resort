@@ -9,6 +9,14 @@ export function DiningExperienceGrid({
 }: {
   highlights: DiningHighlight[]
 }) {
+  if (highlights.length === 0) {
+    return (
+      <div className="border border-dashed border-[#d8d3c8] bg-[#fbfaf7] px-6 py-12 text-center text-[13px] text-[#626962]">
+        Dining experiences are being updated for the next service.
+      </div>
+    )
+  }
+
   return (
     <div className="grid gap-6 lg:grid-cols-[2fr_0.95fr]">
       <article className="relative min-h-[440px] overflow-hidden rounded-[8px] bg-[#1b211d] text-white">
