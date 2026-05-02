@@ -1,63 +1,10 @@
 import type { MenuItem } from '@/types/dining'
 
-const appetizers: MenuItem[] = [
-  {
-    name: 'Citrus Cured Scallops',
-    price: 24,
-    description:
-      'Thinly sliced sea scallops, yuzu pearls, micro cilantro, jalapeno oil, and a dusting of sea salt.',
-  },
-  {
-    name: 'Heirloom Tomato Tartare',
-    price: 19,
-    description:
-      'Balsamic caviar, whipped burrata, basil emulsion, served with toasted sourdough crisps.',
-  },
-  {
-    name: 'Wood-Fired Octopus',
-    price: 28,
-    description:
-      'Charred Spanish octopus, romesco sauce, fingerling potatoes, and smoked paprika dust.',
-  },
-]
+export function DiningMenuPage({ menuItems }: { menuItems: MenuItem[] }) {
+  const appetizers = menuItems.filter((item) => item.category === 'appetizers')
+  const mains = menuItems.filter((item) => item.category === 'mains')
+  const desserts = menuItems.filter((item) => item.category === 'desserts')
 
-const mains: MenuItem[] = [
-  {
-    name: 'Lobster & Truffle Risotto',
-    price: 64,
-    description:
-      'Butter-poached Maine lobster tail, carnaroli rice, shaved black winter truffle, and aged parmigiano-reggiano.',
-  },
-  {
-    name: 'Aged Wagyu Striploin',
-    price: 85,
-    description:
-      'A4 Japanese Wagyu, confit garlic, wild mushrooms, pommes puree, and a rich bordelaise reduction.',
-  },
-  {
-    name: 'Herb-Crusted Rack of Lamb',
-    price: 58,
-    description:
-      'Colorado lamb, pistachio-mint crust, charred baby carrots, and a blackberry demi-glace.',
-  },
-]
-
-const desserts: MenuItem[] = [
-  {
-    name: 'Valrhona Chocolate Sphere',
-    price: 18,
-    description:
-      'Dark chocolate shell, hazelnut praline mousse, passionfruit curd, served with warm salted caramel poured tableside.',
-  },
-  {
-    name: 'Coconut Panna Cotta',
-    price: 15,
-    description:
-      'Silky coconut cream, compressed mango, toasted macadamia nuts, and a kaffir lime syrup.',
-  },
-]
-
-export function DiningMenuPage() {
   return (
     <>
       <section

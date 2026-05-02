@@ -1,56 +1,15 @@
 import type { Activity, WeeklyActivity } from '@/types/activities'
 import { ActivityCard } from '@/features/activities/components/ActivityCard'
+import { activityFilters } from '@/features/activities/activities.seed'
 import { WeeklyRhythm } from '@/features/activities/components/WeeklyRhythm'
 
-const categoryFilters = [
-  'All Activities',
-  'Water Sports',
-  'Land Adventures',
-  'Cultural Tours',
-  'Wellness',
-]
-
-const activities: Activity[] = [
-  {
-    name: 'Guided Reef Snorkeling',
-    description:
-      'Explore the vibrant biodiversity of our private house reef with expert marine biologists.',
-    category: 'Water',
-    duration: '3 Hours',
-    image:
-      'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=900&q=84',
-  },
-  {
-    name: 'Sunset Yacht Charter',
-    description:
-      'A private sailing experience complete with champagne and chef-prepared hors d’oeuvres.',
-    category: 'Leisure',
-    duration: '4 Hours',
-    image:
-      'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=84',
-  },
-  {
-    name: 'Island Hiking Trails',
-    description:
-      'Discover hidden waterfalls and panoramic vistas on a guided trek through the island interior.',
-    category: 'Land',
-    duration: 'Half Day',
-    image:
-      'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=900&q=84',
-  },
-]
-
-const weeklyActivities: WeeklyActivity[] = [
-  { day: 'Mon', time: '07:00 AM', name: 'Sunrise Yoga', tone: 'blue' },
-  { day: 'Tue', time: '10:00 AM', name: 'Coral Planting', tone: 'green' },
-  { day: 'Wed', time: '07:00 AM', name: 'Sunrise Yoga', tone: 'blue' },
-  { day: 'Thu', time: '04:00 PM', name: 'Sunset Tai Chi', tone: 'sand' },
-  { day: 'Fri', time: '07:00 AM', name: 'Sunrise Yoga', tone: 'blue' },
-  { day: 'Sat', time: '11:00 AM', name: 'Beach Bonfire', tone: 'stone' },
-  { day: 'Sun', time: '06:00 PM', name: 'Guided Meditation', tone: 'blue' },
-]
-
-export function ActivitiesPage() {
+export function ActivitiesPage({
+  activities,
+  weeklyActivities,
+}: {
+  activities: Activity[]
+  weeklyActivities: WeeklyActivity[]
+}) {
   return (
     <>
       <section
@@ -79,7 +38,7 @@ export function ActivitiesPage() {
 
       <section className="border-b border-[#e4e1d8] bg-[#fbfaf7]" aria-label="Activity filters">
         <div className="flex justify-center gap-10 overflow-x-auto px-6 py-5 text-[10px] uppercase text-[#7a8079] md:px-10 lg:px-20">
-          {categoryFilters.map((filter) => (
+          {activityFilters.map((filter) => (
             <button
               className="shrink-0 border-b border-transparent pb-1 transition-colors hover:border-[#1b211d] hover:text-[#1b211d] first:border-[#1b211d] first:text-[#1b211d]"
               key={filter}

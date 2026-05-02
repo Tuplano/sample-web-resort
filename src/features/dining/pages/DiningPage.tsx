@@ -1,22 +1,11 @@
 import type { DiningHighlight } from '@/types/dining'
 import { DiningExperienceGrid } from '@/features/dining/components/DiningExperienceGrid'
 
-const diningHighlights: DiningHighlight[] = [
-  {
-    label: 'Raw Bar',
-    name: 'Ocean Harvest',
-    description:
-      'Daily shellfish, reef fish crudo, and chilled coastal plates prepared with citrus, herbs, and mineral sea salts.',
-  },
-  {
-    label: 'Cellar',
-    name: 'Sommelier Pairings',
-    description:
-      'Old-world wines, island infusions, and zero-proof pairings selected to follow each course with restraint.',
-  },
-]
-
-export function DiningPage() {
+export function DiningPage({
+  diningHighlights,
+}: {
+  diningHighlights: DiningHighlight[]
+}) {
   return (
     <>
       <section
